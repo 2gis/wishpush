@@ -1,3 +1,25 @@
+<form action="/dashboard/" method="post">{% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="fieldWrapper">
+        {{ form.email.errors }}
+        <label for="id_email">Email:</label>
+        {{ form.email }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.wish.errors }}
+        <label for="id_wish">Your wish:</label>
+        {{ form.wish }}
+    </div>
+    <p><input type="submit" value="Publish wish" /></p>
+</form>
+{% if form.subject.errors %}
+    <ol>
+    {% for error in form.subject.errors %}
+        <li><strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
 {% if wish_list %}
     <div>
     {% for wish in wish_list %}
