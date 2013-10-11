@@ -1,31 +1,99 @@
-<form action="/dashboard/" method="post">{% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="fieldWrapper">
-        {{ form.email.errors }}
-        <label for="id_email">Email:</label>
-        {{ form.email }}
-    </div>
-    <div class="fieldWrapper">
-        {{ form.wish.errors }}
-        <label for="id_wish">Your wish:</label>
-        {{ form.wish }}
-    </div>
-    <p><input type="submit" value="Publish wish" /></p>
-</form>
-{% if form.subject.errors %}
-    <ol>
-    {% for error in form.subject.errors %}
-        <li><strong>{{ error|escape }}</strong></li>
-    {% endfor %}
-    </ol>
-{% endif %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Пуш желаний команды Автоматов</title>
+		<style type="text/css">
+		body
+		{
+            font: 0.90em/1.4 Arial,sans-serif;
+		}
+		td
+		{
+			empty-cells: hide;
+		}
+		.mDIV
+		{
+            font-size: 18pt;
+            font-weight: bold;
+        }
+		.tableWish
+		{
+            font-size:      12pt;
+            text-align:     center;
+			border: solid 1px black;
+        }
+		#tdError
+		{
+			border: dashed 2px rgb(200, 0, 0);
+		}
+		</style> 
+	</head>
+	<body>
+		<div class="mDIV">
+			Добавление желания
+		</div>
+		
+		<div>
+			<form action="/dashboard/" method="post">
+				{% csrf_token %}
+				{{ form.non_field_errors }}
+				<table>
+					<tr><td align="left"><label for="id_email">Email:</label></td></tr>
+					<tr><td>{{ form.email }}</td></tr>
+				</table>
+				<table>
+					<tr><td id="tdError">{{ form.email.errors }}</td></tr>
+				</table>
+				<table>
+					<tr><td align="left"><label for="id_wish">Your wish:</label></td></tr>
+					<tr><td>{{ form.wish }}</td></tr>
+				</table>
+				<table>
+					<tr><td id="tdError">{{ form.wish.errors }}</td></tr>
+				</table>
+				<p><input type="submit" value="Publish wish"/></p>
+			</form>
+			{% if form.subject.errors %}
+				<ol>
+					{% for error in form.subject.errors %}
+						<li><strong>{{ error|escape }}</strong></li>
+					{% endfor %}
+				</ol>
+			{% endif %}
+		</div>
 
-{% if wish_list %}
-    <div>
-    {% for wish in wish_list %}
-        <div><a href="/wish/{{ wish.id }}/">{{ wish.id }}</a></div><div>{{ wish.email }}</div><div>{{ wish.wish }}</div></div>
-    {% endfor %}
-    </div>
-{% else %}
-    <p>No wishes currently available.</p>
-{% endif %}
+		<div class="mDIV">
+			Список текущих желании
+		</div>
+		
+		<div>
+			{% if wish_list %}
+				<table class="tableWish" rules="all">
+					<tr>
+						<td><b>Id</b></td>
+						<td><b>E-mail</b></td>
+						<td><b>Wish</b></td>
+					</tr>
+
+					{% for wish in wish_list %}
+						<tr>
+							<td>
+								<div><a href="/wish/{{ wish.id }}/">{{ wish.id }}</a></div>
+							</td>
+							<td>
+								<div>{{ wish.email }}</div>
+							</td>
+							<td>
+								<div>{{ wish.wish }}</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+			{% else %}
+				<p>No wishes currently available.</p>
+			{% endif %}
+		</div>
+	</body>
+</html>
+
