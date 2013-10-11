@@ -1,0 +1,9 @@
+{% if wish_list %}
+    <div>
+    {% for wish in wish_list %}
+        <div><a href="/wish/{{ wish.id }}/">{{ wish.id }}</a></div><div>{{ wish.email }}</div><div>{{ wish.wish }}</div></div>
+    {% endfor %}
+    </div>
+{% else %}
+    <p>No wishes currently available.</p>
+{% endif %}
