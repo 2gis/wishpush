@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'dashboard',
+    'notifier',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,3 +161,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'wishpushnotifier@gmail.com'
 EMAIL_HOST_PASSWORD = 'wishpush123'
 EMAIL_PORT = 587
+
+VOICE_NOTIFIER_HOST = 'uk-rnd-106.2gis.local'
+VOICE_NOTIFIER_PORT = 80
+VOICE_NOTIFIER_SERVICE = 'NotifierService.asmx/Report'

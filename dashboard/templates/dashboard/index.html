@@ -2,38 +2,48 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Пуш желаний команды Автоматов</title>
+		<title>WishPush</title>
 		<style type="text/css">
-		body
-		{
+		body {
             font: 0.90em/1.4 Arial,sans-serif;
 		}
-		td
-		{
+		td {
 			empty-cells: hide;
 		}
-		.mDIV
-		{
+
+        .error {
+            border: dashed 2px rgb(200, 0, 0);
+        }
+
+		.mDIV {
             font-size: 18pt;
             font-weight: bold;
         }
-		.tableWish
-		{
+		.wish_list {
+            display: table;
+            text-align: center;
             font-size:      12pt;
-            text-align:     center;
 			border: solid 1px black;
         }
-		#tdError
-		{
-			border: dashed 2px rgb(200, 0, 0);
-		}
+
+        .caption { 
+            font-size: 18pt;
+            font-weight: bold;
+        }
+
+        .cell {
+            display: table-cell;
+            padding-left: 20px;
+        }
+
+        .row {
+            width: auto;
+            display: table-row;
+            margin: 0px auto 10px auto;
+        }
 		</style> 
 	</head>
 	<body>
-		<div class="mDIV">
-			Добавление желания
-		</div>
-		
 		<div>
 			<form action="/dashboard/" method="post">
 				{% csrf_token %}
@@ -43,14 +53,14 @@
 					<tr><td>{{ form.email }}</td></tr>
 				</table>
 				<table>
-					<tr><td id="tdError">{{ form.email.errors }}</td></tr>
+					<tr><td class="error">{{ form.email.errors }}</td></tr>
 				</table>
 				<table>
 					<tr><td align="left"><label for="id_wish">Your wish:</label></td></tr>
 					<tr><td>{{ form.wish }}</td></tr>
 				</table>
 				<table>
-					<tr><td id="tdError">{{ form.wish.errors }}</td></tr>
+					<tr><td class="error">{{ form.wish.errors }}</td></tr>
 				</table>
 				<p><input type="submit" value="Publish wish"/></p>
 			</form>
@@ -63,37 +73,38 @@
 			{% endif %}
 		</div>
 
-		<div class="mDIV">
-			Список текущих желании
-		</div>
+		<div class="caption">Wishes</div>
 		
 		<div>
 			{% if wish_list %}
-				<table class="tableWish" rules="all">
-					<tr>
-						<td><b>Id</b></td>
-						<td><b>E-mail</b></td>
-						<td><b>Wish</b></td>
-					</tr>
+				<div class="wish_list" rules="all">
+                    <div class="row">
+    					<div class="cell">E-mail</div>
+    					<div class="cell">Wish</div>
+                        <div class="cell">Status</div>
+                        <div class="cell">Jira Ticket</div>
+                    </div>
 
 					{% for wish in wish_list %}
-						<tr>
-							<td>
-								<div><a href="/wish/{{ wish.id }}/">{{ wish.id }}</a></div>
-							</td>
-							<td>
+						<div class="row">
+							<div class="cell">
 								<div>{{ wish.email }}</div>
-							</td>
-							<td>
-								<div>{{ wish.wish }}</div>
-							</td>
-						</tr>
+							</div>
+							<div class="cell">
+                            <div>{{ wish.wish }}</div>
+                            </div>
+                            <div class="cell">
+                                <div>{{ wish.status }}</div>
+                            </div>
+                            <div class="cell">
+                                <div>{{ wish.jira_ticket }}</div>
+                            </div>
+						</div>
 					{% endfor %}
-				</table>
+				</div>
 			{% else %}
 				<p>No wishes currently available.</p>
 			{% endif %}
 		</div>
 	</body>
 </html>
-

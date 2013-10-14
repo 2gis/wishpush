@@ -11,4 +11,4 @@ class Wish(models.Model):
 
 class WishForm(forms.Form):
     email = forms.EmailField(max_length=100)
-    wish = forms.CharField()
+    wish = forms.CharField(widget=forms.Textarea)
