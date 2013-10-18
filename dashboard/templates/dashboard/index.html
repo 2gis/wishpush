@@ -1,122 +1,102 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>WishPush</title>
-		<style type="text/css">
-		body {
-            font: 0.90em/1.4 Arial,sans-serif;
-		}
-		
-		td {
-			empty-cells: hide;
-		}
+<head>
+	<link href="{{ STATIC_URL }}bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<meta charset="utf-8">
+	<title>WishPush</title>
+	<style>
+	.show-grid {
+		margin-bottom: 10px;
+	}
+hr { display: block; height: 1px;
+    border: 0; border-top: 1px solid #ccc;
+    margin: 1em 0; padding: 0; }
+	</style>
+</head>
+<body >
+	<div class="container well">
+		<h1>Добавить желание</h1>
+{% if form.email.errors or form.wish.errors %}
+<div class="alert alert-danger">
 
-        .error {
-            border: dashed 2px rgb(200, 0, 0);
-        }
+		{% if form.email.errors %}<span>Электропочта: </span>{{ form.email.errors }}{% endif %}
+			{% if form.wish.errors %}<span>Желание: </span>{{ form.wish.errors }}{% endif %}
 
-		.mDIV {
-            font-size: 18pt;
-            font-weight: bold;
-        }
-		
-		.wish_list {
-            display: table;
-            text-align: center;
-            font-size:      12pt;
-			border-top: solid 1px black;
-			border-left: solid 1px black;
-        }
-
-        .caption { 
-            font-size: 18pt;
-            font-weight: bold;
-        }
-
-        .cell {
-            display: table-cell;
-            padding-left: 10px;
-            padding-right: 10px;
-			border-bottom: solid 1px black;
-			border-right: solid 1px black;
-        }
-		
-		.header {
-			font-weight: bold;
-		}
-
-        .row {
-            width: auto;
-            display: table-row;
-            margin: 0px auto 10px auto;
-        }
-		</style> 
-	</head>
-	<body>
-		<div>
-			<div class="caption">Add wish</div>
-			
-			<form action="/dashboard/" method="post">
-				{% csrf_token %}
-				{{ form.non_field_errors }}
-				<table>
-					<tr><td align="left"><label for="id_email">Email:</label></td></tr>
-					<tr><td>{{ form.email }}</td></tr>
-				</table>
-				<table>
-					<tr><td class="error">{{ form.email.errors }}</td></tr>
-				</table>
-				<table>
-					<tr><td align="left"><label for="id_wish">Your wish:</label></td></tr>
-					<tr><td>{{ form.wish }}</td></tr>
-				</table>
-				<table>
-					<tr><td class="error">{{ form.wish.errors }}</td></tr>
-				</table>
-				<p><input type="submit" value="Publish wish"/></p>
-			</form>
-			{% if form.subject.errors %}
-				<ol>
-					{% for error in form.subject.errors %}
-						<li><strong>{{ error|escape }}</strong></li>
-					{% endfor %}
-				</ol>
-			{% endif %}
-		</div>
-		
-		<div>
-			<div class="caption">Wishes</div>
-			
-			{% if wish_list %}
-				<div class="wish_list" rules="all">
-                    <div class="row">
-    					<div class="cell header">E-mail</div>
-    					<div class="cell header">Wish</div>
-                        <div class="cell header">Status</div>
-                        <div class="cell header">Jira Ticket</div>
-                    </div>
-
-					{% for wish in wish_list %}
-						<div class="row">
-							<div class="cell">
-								<div>{{ wish.email }}</div>
-							</div>
-							<div class="cell">
-                            <div>{{ wish.wish }}</div>
-                            </div>
-                            <div class="cell">
-                                <div>{{ wish.status }}</div>
-                            </div>
-                            <div class="cell">
-                                <div>{{ wish.jira_ticket }}</div>
-                            </div>
-						</div>
-					{% endfor %}
+			</div>
+{% endif %}
+		<form action="/dashboard/" method="post" role="form">
+			{% csrf_token %}
+			{{ form.non_field_errors }}
+			<div class="row">
+				<div class="form-group col-lg-3">
+					<label for="email">Электропочта:</label>
+					<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
 				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-lg-4">
+					<label for="wish">Желание:</label>
+					<textarea rows="4" class="form-control" id="wish" name="wish" placeholder="Enter your wish"></textarea>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-lg-2">
+					<button type="submit" class="btn btn-primary">Поехали!</button>
+				</div>
+				<div id="newWishRow" class="row" style="display: none;">
+					<div id="newEmail" class="col-xs-3">
+					</div>
+					<div id="newWish" class="col-xs-3">
+					</div>
+					<div class="col-xs-3">
+					</div>
+					<div class="col-xs-3">
+					</div>
+				</div>
+			</div>
+		</form>
+
+		{% if form.subject.errors %}
+		<ol>
+			{% for error in form.subject.errors %}
+			<li><strong>{{ error|escape }}</strong></li>
+			{% endfor %}
+		</ol>
+		{% endif %}
+
+		<h1 class="caption">Желания</h1>
+		{% if wish_list %}
+		<div class="row show-grid">
+			<div class="col-xs-3"><strong>E-mail</strong></div>
+			<div class="col-xs-3"><strong>Wish</strong></div>
+			<div class="col-xs-3"><strong>Status</strong></div>
+			<div class="col-xs-3"><strong>Jira Ticket</strong></div>
+		</div>
+		<div id="wishes">
+			{% for wish in wish_list %}
+			<div class="row show-grid">
+				<div class="col-xs-3">
+					<div>{{ wish.email }}</div>
+				</div>
+				<div class="col-xs-3">
+					<div>{{ wish.wish }}</div>
+				</div>
+				<div class="col-xs-3">
+					<div>{{ wish.status }}</div>
+				</div>
+				<div class="col-xs-3">
+					<div>{{ wish.jira_ticket }}</div>
+				</div>
+			</div>
+			<hr>
+			{% endfor %}
+
 			{% else %}
-				<p>No wishes currently available.</p>
+			<p>No wishes currently available.</p>
 			{% endif %}
 		</div>
-	</body>
+	</div>
+	<script src="{{ STATIC_URL }}bootstrap.min.js"></script>
+	<script src="{{ STATIC_URL }}jquery-2.0.3.min.js"></script>
+</body>
 </html>
