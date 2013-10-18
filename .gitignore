@@ -1,3 +1,6 @@
+wishpush.db
+wishpush/settings.py
+
 *.py[cod]
 
 # C extensions
