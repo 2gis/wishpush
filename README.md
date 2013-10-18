@@ -9,6 +9,7 @@ Service for pushing wishes to jira
 + python manage.py syncdb
 + python manage.py sql dashboard
 + python manage.py syncdb
++ python manage.py collectstatic
 
 # run
 + python manage.py runserver 0.0.0.0:8081
